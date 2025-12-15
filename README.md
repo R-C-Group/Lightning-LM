@@ -35,6 +35,8 @@ cmake --build build
 
 cd build
 sudo make install #必须
+# 5. 更新动态链接库缓存
+sudo ldconfig
 ```
 
 * 编译
@@ -50,9 +52,82 @@ sudo apt install python3-colcon-common-extensions
 echo "source ~/colcon_ws/install/local_setup.bash" >> ~/.bashrc
 ```
 
+* 编译过程如果报错`c++: fatal error: Killed signal terminated program cc1plus compilation terminated.`则是由于是由于系统内存不足导致的。
 
 * 数据准备是需要将数据转换为ros2的db3格式的，不过作者提供了转换后的数据：BaiduYun: https://pan.baidu.com/s/1XmFitUtnkKa2d0YtWquQXw?pwd=xehn 提取码: xehn
 
+
+# debug
+
+## GDB debug
+
+```bash
+# 1. 安装GDB
+sudo apt-get install gdb
+
+# 2. 使用GDB运行程序
+gdb --args /home/kwanwaipang/colcon_ws/src/install/lightning/lib/lightning/run_slam_online --config ./config/default_nclt.yaml
+
+# 在gdb提示符下运行
+(gdb) run
+
+# 程序崩溃后，获取回溯信息
+(gdb) bt
+(gdb) bt full
+
+# 查看所有线程的堆栈
+(gdb) thread apply all bt
+
+# 退出gdb
+(gdb) quit
+```
+
+如果打开Pangolin后出现`Segmentation fault`，应该是WSL 的图形子系统与 OpenGL/Pangolin 不兼容。
+
+* 安装必要的图形库：
+
+```bash
+# 更新系统
+sudo apt update
+sudo apt upgrade -y
+
+# 安装 Mesa 和 OpenGL 相关库
+sudo apt install -y \
+    mesa-utils \
+    libgl1-mesa-glx \
+    libgl1-mesa-dri \
+    libglu1-mesa \
+    libegl1-mesa \
+    libgles2-mesa \
+    libosmesa6
+
+# 安装 X11 相关
+sudo apt install -y \
+    x11-apps \
+    x11-utils \
+    x11-xserver-utils \
+    xauth \
+    xorg \
+    xvfb
+
+# 测试 OpenGL
+glxinfo | grep -E "OpenGL|renderer"
+glxgears  # 应该能看到旋转的齿轮
+```
+
+似乎都无效，最终采用强制使用X11后端而不是Wayland
+
+```bash
+# 禁用Wayland，强制使用X11
+export WAYLAND_DISPLAY=""
+export QT_QPA_PLATFORM="xcb"
+export GDK_BACKEND="x11"
+export SDL_VIDEODRIVER="x11"
+export PANGOLIN_WINDOW_URI="x11://"
+
+# 然后运行程序
+ros2 run lightning run_slam_online --config ./config/default_nclt.yaml
+```
 
 # 实验测试
 
