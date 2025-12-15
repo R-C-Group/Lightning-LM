@@ -1,0 +1,11 @@
+*build
+*install
+*log
+*.vscode
+*libs
+**data
+**/.vscode/
+bin
+
+**cmake-build-debug**
+**cmake-build-release**
