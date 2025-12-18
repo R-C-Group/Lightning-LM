@@ -184,6 +184,12 @@ ros2 run lightning run_slam_online --config ./config/default_nclt.yaml
 </figcaption>
 </div>
 
+<div align="center">
+  <img src="./doc/微信截图_20251218094454.png" width="90%" />
+<figcaption>  
+</figcaption>
+</div>
+
 
 2. 离线定位
     - ```ros2 run lightning run_loc_offline --config ./config/default_nclt.yaml --input_bag 数据包```
@@ -191,6 +197,11 @@ ros2 run lightning run_slam_online --config ./config/default_nclt.yaml
 3. 接收定位结果
     - 定位程序输出与IMU同频的TF话题（50-100Hz）
 
+<div align="center">
+  <img src="./doc/微信截图_20251218094612.png" width="90%" />
+<figcaption>  
+</figcaption>
+</div>
 
 # 算力分析
 
