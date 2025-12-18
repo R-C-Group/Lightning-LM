@@ -3,5 +3,6 @@
 <a href="https://github.com/gaoxiang12/lightning-lm">Github</a>
 </div>
 
-## Update log
+## log
 - [x] 代码配置[Link](./setup.md)
+- [ ] 已有功能解读：
